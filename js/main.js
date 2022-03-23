@@ -1,35 +1,49 @@
 // player object
 const player = (faction) => {
   let moveCounter = 0;
+  let wins = 0;
   this.faction = faction;
   const getCounter = () => moveCounter;
   const resetCounter = () => moveCounter = 0;
-  const addOne = () => moveCounter++;
+  const movesDone = () => moveCounter++;
+  const addWin = () => wins++;
+  const getWins = () => {
+    return wins;
+  }
+  const resetWins = () => wins = 0;
   return {
     faction,
     getCounter,
     resetCounter,
-    addOne
+    movesDone,
+    addWin,
+    getWins,
+    resetWins
   };
 }
 
-
 const gameboard = () => {
   let squares = [];
-  let game = 1;
   const resetSquareArr = () => squares.length = 0;
+  return {
+    squares,
+    resetSquareArr
+  }
+}
+
+// winner of war will be determined by best of three matches
+const bestOf3 = () => {
+  let game = 1;
   const getGameNumber = () => {
     return game;
   }
   const nextGame = () => game++;
   const resetGame = () => game = 1;
   return {
-    squares,
     getGameNumber,
-    resetSquareArr,
     nextGame,
     resetGame
-  };
+  }
 }
 
 const checkWinner = (player) => {
@@ -39,7 +53,8 @@ const checkWinner = (player) => {
       board.squares[i + 1] == player.faction &&
       board.squares[i + 2] == player.faction) {
       alert(`winner is ${player.faction}, consec row`);
-      board.nextGame();
+      player.addWin();
+      war.nextGame();
       setBoard();
       return `winner is ${player.faction}`;
     }
@@ -50,7 +65,8 @@ const checkWinner = (player) => {
       board.squares[i + 3] == player.faction &&
       board.squares[i + 6] == player.faction) {
       alert(`winner is ${player.faction}, consec column`);
-      board.nextGame();
+      player.addWin();
+      war.nextGame();
       setBoard();
       return `winner is ${player.faction}`;
     }
@@ -64,7 +80,8 @@ const checkWinner = (player) => {
       board.squares[4] == player.faction &&
       board.squares[6] == player.faction)) {
     alert(`winner is ${player.faction}, consec diagonal`);
-    board.nextGame();
+    player.addWin();
+    war.nextGame();
     setBoard();
     return `winner is ${player.faction}`;
   }
@@ -80,13 +97,13 @@ function markSpot(e) {
     if (playerX.getCounter() == playerO.getCounter()) {
       e.target.textContent = 'X'
       board.squares[e.target.title] = playerX.faction;
-      playerX.addOne();
+      playerX.movesDone();
       checkWinner(playerX);
       console.log(playerX.getCounter())
     } else if (playerX.getCounter() > playerO.getCounter()) {
       e.target.textContent = 'O'
       board.squares[e.target.title] = playerO.faction;
-      playerO.addOne();
+      playerO.movesDone();
       console.log(playerO.getCounter())
       checkWinner(playerO);
     }
@@ -96,11 +113,21 @@ function markSpot(e) {
 
 
 function setBoard(e) {
-  alert('this is game: ' + board.getGameNumber());
-  if(board.getGameNumber() > 3) {
-    alert('3 games are done, now to reset back to game 1')
-    board.resetGame();
+
+  if (playerO.getWins() == 2) {
+    alert('O wins the war!')
+    war.resetGame();
+    playerO.resetWins();
+    playerX.resetWins();
+  } else if (playerX.getWins() == 2) {
+    alert('X wins the war!');
+    playerO.resetWins();
+    playerX.resetWins();
+    war.resetGame();
+  } else {
+    alert('this is game: ' + war.getGameNumber());
   }
+
 
   //reset gameboard to blank
   let squares = document.querySelectorAll('.territory')
@@ -119,9 +146,11 @@ function setBoard(e) {
   }
 }
 
+////////////////////////////////////////////////////////////////
+
 //create player 1 and 2
 const playerO = player('O');
 const playerX = player('X');
 const board = gameboard();
-
+const war = bestOf3();
 document.querySelector('.start-it').addEventListener('click', setBoard);
