@@ -15,7 +15,7 @@ const player = (faction) => {
 
 
 const gameboard = () => {
-  let squares = ['', '', '', '', '', '', '', '', ''];
+  let squares = [];
   let game = 1;
   const resetSquareArr = () => squares.length = 0;
   const getGameNumber = () => {
@@ -107,21 +107,9 @@ function setBoard(e) {
   }
 }
 
-//start game til best of 3 is finished
-function start() {
-  // set board to play
-  document.querySelector('.start-it').addEventListener('click', setBoard);
-
-  if(board.getGameNumber() == 3) {
-    alert('winner is found');
-  }
-}
-
-
-
-
 //create player 1 and 2
 const playerO = player('O');
 const playerX = player('X');
 const board = gameboard();
-start();
+
+document.querySelector('.start-it').addEventListener('click', setBoard);

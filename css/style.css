@@ -14,3 +14,14 @@
   align-items: center;
   font-size: 5rem;
 }
+
+.heart {
+  background-color: bisque;
+  height: 700px;
+  width: 700px;
+  margin: 5rem auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
