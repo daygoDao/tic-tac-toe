@@ -1,0 +1,16 @@
+.gameboard {
+  height: 500px;
+  width: 500px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  border: 5px solid blue;
+}
+
+.territory {
+  border: thin solid red; 
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  font-size: 5rem;
+}
