@@ -110,11 +110,9 @@ function markSpot(e) {
   }
 }
 
-
-
 function setBoard(e) {
-
   checkWarWinner();
+
   //reset gameboard to blank
   let squares = document.querySelectorAll('.territory')
   for (let square of squares) {
@@ -162,5 +160,3 @@ const playerX = player('X');
 const board = gameboard();
 const war = bestOf3();
 document.querySelector('.start-it').addEventListener('click', setBoard);
-let xScore = document.querySelector('.scorePlayerX');
-let oScore = document.querySelector('.scorePlayerO');
