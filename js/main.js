@@ -22,7 +22,7 @@ const gameboard = () => {
     return game;
   }
   const nextGame = () => game++;
-  const resetGame = () => game = 0;
+  const resetGame = () => game = 1;
   return {
     squares,
     getGameNumber,
@@ -39,6 +39,8 @@ const checkWinner = (player) => {
       board.squares[i + 1] == player.faction &&
       board.squares[i + 2] == player.faction) {
       alert(`winner is ${player.faction}, consec row`);
+      board.nextGame();
+      setBoard();
       return `winner is ${player.faction}`;
     }
 
@@ -48,6 +50,8 @@ const checkWinner = (player) => {
       board.squares[i + 3] == player.faction &&
       board.squares[i + 6] == player.faction) {
       alert(`winner is ${player.faction}, consec column`);
+      board.nextGame();
+      setBoard();
       return `winner is ${player.faction}`;
     }
   }
@@ -60,6 +64,8 @@ const checkWinner = (player) => {
       board.squares[4] == player.faction &&
       board.squares[6] == player.faction)) {
     alert(`winner is ${player.faction}, consec diagonal`);
+    board.nextGame();
+    setBoard();
     return `winner is ${player.faction}`;
   }
 
@@ -90,6 +96,12 @@ function markSpot(e) {
 
 
 function setBoard(e) {
+  alert('this is game: ' + board.getGameNumber());
+  if(board.getGameNumber() > 3) {
+    alert('3 games are done, now to reset back to game 1')
+    board.resetGame();
+  }
+
   //reset gameboard to blank
   let squares = document.querySelectorAll('.territory')
   for (let square of squares) {
