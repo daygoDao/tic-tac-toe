@@ -6,6 +6,7 @@ const player = (faction) => {
   const resetCounter = () => moveCounter = 0;
   const addOne = () => moveCounter++;
   return {
+    faction,
     getCounter,
     resetCounter,
     addOne
@@ -14,16 +15,40 @@ const player = (faction) => {
 
 
 const gameboard = () => {
-  let board = ['', '', '', '', '', '', '', '', ''];
-  let playerX = 'x';
-  let playerO = 'o';
+  let squares = ['', '', '', '', '', '', '', '', ''];
+  let game = 1;
+  const reset = () => {
+    for (square of squares) {
+      square = '';
+    }
+  }
+  return {
+    squares,
+    game,
+    reset
+  };
 }
 
-const checkWinner = (who) => {
+const checkWinner = (player) => {
+  // check consec rows
+  for (let i = 0; i < 9; i += 3)
+    if (board.squares[i] == player.faction &&
+      board.squares[i + 1] == player.faction &&
+      board.squares[i + 2] == player.faction) {
+      alert(`winner is ${player.faction}, consec row`);
+      return `winner is ${player.faction}`;
+    }
 
+  // check consec columns
+  for (let i = 0; i < 3; i++) {
+    if (board.squares[i] == player.faction &&
+      board.squares[i + 3] == player.faction &&
+      board.squares[i + 6] == player.faction) {
+      alert(`winner is ${player.faction}, consec column`);
+      return `winner is ${player.faction}`;
+    }
+  }
 }
-
-
 
 function markSpot(e) {
   console.log(e.target.title)
@@ -33,14 +58,16 @@ function markSpot(e) {
     // x goes first then o
     if (playerX.getCounter() == playerO.getCounter()) {
       e.target.textContent = 'X'
+      board.squares[e.target.title] = playerX.faction;
       playerX.addOne();
-      checkWinner('X');
+      checkWinner(playerX);
       console.log(playerX.getCounter())
     } else if (playerX.getCounter() > playerO.getCounter()) {
       e.target.textContent = 'O'
+      board.squares[e.target.title] = playerO.faction;
       playerO.addOne();
       console.log(playerO.getCounter())
-      checkWinner('O');
+      checkWinner(playerO);
     }
   }
 }
@@ -56,6 +83,9 @@ function setBoard(e) {
   // reset move counter from player obj
   playerO.resetCounter();
   playerX.resetCounter();
+  //reset board arr
+  //board.reset();
+  board.squares = [];
 
   // add event listeners to all playable squares
   for (let square of squares) {
@@ -66,7 +96,6 @@ function setBoard(e) {
 //start game til best of 3 is finished
 function start() {
   let game = 1;
-
   // set board to play
   document.querySelector('.start-it').addEventListener('click', setBoard);
 
@@ -76,8 +105,11 @@ function start() {
   }
 }
 
+
+
+
 //create player 1 and 2
 const playerO = player('O');
 const playerX = player('X');
-
+const board = gameboard();
 start();
