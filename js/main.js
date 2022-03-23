@@ -17,15 +17,18 @@ const player = (faction) => {
 const gameboard = () => {
   let squares = ['', '', '', '', '', '', '', '', ''];
   let game = 1;
-  const reset = () => {
-    for (square of squares) {
-      square = '';
-    }
+  const resetSquareArr = () => squares.length = 0;
+  const getGameNumber = () => {
+    return game;
   }
+  const nextGame = () => game++;
+  const resetGame = () => game = 0;
   return {
     squares,
-    game,
-    reset
+    getGameNumber,
+    resetSquareArr,
+    nextGame,
+    resetGame
   };
 }
 
@@ -48,6 +51,18 @@ const checkWinner = (player) => {
       return `winner is ${player.faction}`;
     }
   }
+
+  // check diagonal
+  if ((board.squares[0] == player.faction &&
+      board.squares[4] == player.faction &&
+      board.squares[8] == player.faction) ||
+    (board.squares[2] == player.faction &&
+      board.squares[4] == player.faction &&
+      board.squares[6] == player.faction)) {
+    alert(`winner is ${player.faction}, consec diagonal`);
+    return `winner is ${player.faction}`;
+  }
+
 }
 
 function markSpot(e) {
@@ -84,8 +99,7 @@ function setBoard(e) {
   playerO.resetCounter();
   playerX.resetCounter();
   //reset board arr
-  //board.reset();
-  board.squares = [];
+  board.resetSquareArr();
 
   // add event listeners to all playable squares
   for (let square of squares) {
@@ -95,13 +109,11 @@ function setBoard(e) {
 
 //start game til best of 3 is finished
 function start() {
-  let game = 1;
   // set board to play
   document.querySelector('.start-it').addEventListener('click', setBoard);
 
-  while (game <= 3) {
-    console.log(game)
-    game++;
+  if(board.getGameNumber() == 3) {
+    alert('winner is found');
   }
 }
 
