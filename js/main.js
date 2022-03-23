@@ -46,7 +46,7 @@ const bestOf3 = () => {
   }
 }
 
-const checkWinner = (player) => {
+const checkMatchWinner = (player) => {
   // check consec rows
   for (let i = 0; i < 9; i += 3)
     if (board.squares[i] == player.faction &&
@@ -98,14 +98,14 @@ function markSpot(e) {
       e.target.textContent = 'X'
       board.squares[e.target.title] = playerX.faction;
       playerX.movesDone();
-      checkWinner(playerX);
+      checkMatchWinner(playerX);
       console.log(playerX.getCounter())
     } else if (playerX.getCounter() > playerO.getCounter()) {
       e.target.textContent = 'O'
       board.squares[e.target.title] = playerO.faction;
       playerO.movesDone();
       console.log(playerO.getCounter())
-      checkWinner(playerO);
+      checkMatchWinner(playerO);
     }
   }
 }
@@ -114,21 +114,7 @@ function markSpot(e) {
 
 function setBoard(e) {
 
-  if (playerO.getWins() == 2) {
-    alert('O wins the war!')
-    war.resetGame();
-    playerO.resetWins();
-    playerX.resetWins();
-  } else if (playerX.getWins() == 2) {
-    alert('X wins the war!');
-    playerO.resetWins();
-    playerX.resetWins();
-    war.resetGame();
-  } else {
-    alert('this is game: ' + war.getGameNumber());
-  }
-
-
+  checkWarWinner();
   //reset gameboard to blank
   let squares = document.querySelectorAll('.territory')
   for (let square of squares) {
@@ -146,6 +132,28 @@ function setBoard(e) {
   }
 }
 
+function checkWarWinner() {
+  let xScore = document.querySelector('.scorePlayerX');
+  let oScore = document.querySelector('.scorePlayerO');
+
+  if (playerO.getWins() == 2) {
+    alert('O wins the war!')
+    war.resetGame();
+    playerO.resetWins();
+    playerX.resetWins();
+  } else if (playerX.getWins() == 2) {
+    alert('X wins the war!');
+    playerO.resetWins();
+    playerX.resetWins();
+    war.resetGame();
+  } else {
+    alert('this is game: ' + war.getGameNumber());
+  }
+
+  oScore.textContent = playerO.getWins();
+  xScore.textContent = playerX.getWins();
+}
+
 ////////////////////////////////////////////////////////////////
 
 //create player 1 and 2
@@ -154,3 +162,5 @@ const playerX = player('X');
 const board = gameboard();
 const war = bestOf3();
 document.querySelector('.start-it').addEventListener('click', setBoard);
+let xScore = document.querySelector('.scorePlayerX');
+let oScore = document.querySelector('.scorePlayerO');
