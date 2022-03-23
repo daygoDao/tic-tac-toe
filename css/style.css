@@ -4,11 +4,11 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr;
-  border: 5px solid blue;
+  border: 5px solid skyblue;
 }
 
 .territory {
-  border: thin solid red; 
+  border: thin solid salmon; 
   display: grid;
   justify-content: center;
   align-items: center;

@@ -12,15 +12,18 @@ const player = (faction) => {
   };
 }
 
-//create player 1 and 2
-const playerO = player('O');
-const playerX = player('X');
 
 const gameboard = () => {
   let board = ['', '', '', '', '', '', '', '', ''];
   let playerX = 'x';
   let playerO = 'o';
 }
+
+const checkWinner = (who) => {
+
+}
+
+
 
 function markSpot(e) {
   console.log(e.target.title)
@@ -31,23 +34,20 @@ function markSpot(e) {
     if (playerX.getCounter() == playerO.getCounter()) {
       e.target.textContent = 'X'
       playerX.addOne();
+      checkWinner('X');
       console.log(playerX.getCounter())
     } else if (playerX.getCounter() > playerO.getCounter()) {
       e.target.textContent = 'O'
       playerO.addOne();
       console.log(playerO.getCounter())
+      checkWinner('O');
     }
   }
-
-  //check if winner is found
-
 }
 
-// start game
-document.querySelector('.start-it').addEventListener('click', start);
 
 
-function start(e) {
+function setBoard(e) {
   //reset gameboard to blank
   let squares = document.querySelectorAll('.territory')
   for (let square of squares) {
@@ -62,3 +62,22 @@ function start(e) {
     square.addEventListener('click', markSpot);
   }
 }
+
+//start game til best of 3 is finished
+function start() {
+  let game = 1;
+
+  // set board to play
+  document.querySelector('.start-it').addEventListener('click', setBoard);
+
+  while (game <= 3) {
+    console.log(game)
+    game++;
+  }
+}
+
+//create player 1 and 2
+const playerO = player('O');
+const playerX = player('X');
+
+start();
