@@ -53,10 +53,7 @@ const checkMatchWinner = (player) => {
       board.squares[i + 1] == player.faction &&
       board.squares[i + 2] == player.faction) {
       alert(`winner is ${player.faction}, consec row`);
-      player.addWin();
-      war.nextGame();
-      setBoard();
-      return `winner is ${player.faction}`;
+      matchWinner(player);
     }
 
   // check consec columns
@@ -65,10 +62,7 @@ const checkMatchWinner = (player) => {
       board.squares[i + 3] == player.faction &&
       board.squares[i + 6] == player.faction) {
       alert(`winner is ${player.faction}, consec column`);
-      player.addWin();
-      war.nextGame();
-      setBoard();
-      return `winner is ${player.faction}`;
+      matchWinner(player);
     }
   }
 
@@ -80,11 +74,15 @@ const checkMatchWinner = (player) => {
       board.squares[4] == player.faction &&
       board.squares[6] == player.faction)) {
     alert(`winner is ${player.faction}, consec diagonal`);
-    player.addWin();
-    war.nextGame();
-    setBoard();
-    return `winner is ${player.faction}`;
+    matchWinner(player);
   }
+}
+
+function matchWinner(player) {
+  player.addWin();
+  war.nextGame();
+  setBoard();
+  return `winner is ${player.faction}`;
 }
 
 function markSpot(e) {
@@ -109,7 +107,7 @@ function markSpot(e) {
   }
 }
 
-function setBoard(e) {
+function setBoard() {
   checkWarWinner();
 
   //reset gameboard to blank
@@ -144,11 +142,18 @@ function checkWarWinner() {
     playerX.resetWins();
     war.resetGame();
   } else {
-    alert('this is game: ' + war.getGameNumber() + '. X goes first.');
+    alert('Match: ' + war.getGameNumber() + '.\nX goes first.');
   }
 
   oScore.textContent = playerO.getWins();
   xScore.textContent = playerX.getWins();
+}
+
+function startWar() {
+  playerO.resetWins();
+  playerX.resetWins();
+  war.resetGame();
+  setBoard();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -158,4 +163,4 @@ const playerO = player('O');
 const playerX = player('X');
 const board = gameboard();
 const war = bestOf3();
-document.querySelector('.start-it').addEventListener('click', setBoard);
+document.querySelector('.start-it').addEventListener('click', startWar);
