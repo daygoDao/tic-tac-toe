@@ -85,7 +85,6 @@ const checkMatchWinner = (player) => {
     setBoard();
     return `winner is ${player.faction}`;
   }
-
 }
 
 function markSpot(e) {
@@ -145,7 +144,7 @@ function checkWarWinner() {
     playerX.resetWins();
     war.resetGame();
   } else {
-    alert('this is game: ' + war.getGameNumber());
+    alert('this is game: ' + war.getGameNumber() + '. X goes first.');
   }
 
   oScore.textContent = playerO.getWins();
