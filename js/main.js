@@ -23,10 +23,18 @@ const player = (faction) => {
 }
 
 const gameboard = () => {
+  let squaresFilled = 0;
   let squares = [];
-  const resetSquareArr = () => squares.length = 0;
+  const fillSquares = () => squaresFilled++;
+  const getFilledSquares = () => squaresFilled;
+  const resetSquareArr = () => {
+    squaresFilled = 0;
+    squares.length = 0;
+  }
   return {
     squares,
+    getFilledSquares,
+    fillSquares,
     resetSquareArr
   }
 }
@@ -47,6 +55,13 @@ const bestOf3 = () => {
 }
 
 const checkMatchWinner = (player) => {
+  // if tie
+  console.log('within checkMatchWinner.', `squaresFilled is ${board.getFilledSquares()}`)
+  if (board.getFilledSquares() == 9) {
+    alert('tie game')
+    matchWinner();
+  }
+
   // check consec rows
   for (let i = 0; i < 9; i += 3)
     if (board.squares[i] == player.faction &&
@@ -78,15 +93,18 @@ const checkMatchWinner = (player) => {
   }
 }
 
-function matchWinner(player) {
-  player.addWin();
-  war.nextGame();
+function matchWinner(player = 'tie') {
+  if (player !== 'tie') {
+    player.addWin();
+    war.nextGame();
+    //return `winner is ${player.faction}`;
+  } else {
+    alert('its a tie within matchWinner');
+  }
   setBoard();
-  return `winner is ${player.faction}`;
 }
 
 function markSpot(e) {
-  console.log(e.target.title)
   if (e.target.textContent !== '') {
     console.log('already taken');
   } else {
@@ -94,14 +112,14 @@ function markSpot(e) {
     if (playerX.getCounter() == playerO.getCounter()) {
       e.target.textContent = 'X'
       board.squares[e.target.title] = playerX.faction;
+      board.fillSquares();
       playerX.movesDone();
       checkMatchWinner(playerX);
-      console.log(playerX.getCounter())
     } else if (playerX.getCounter() > playerO.getCounter()) {
       e.target.textContent = 'O'
       board.squares[e.target.title] = playerO.faction;
+      board.fillSquares();
       playerO.movesDone();
-      console.log(playerO.getCounter())
       checkMatchWinner(playerO);
     }
   }
@@ -113,7 +131,7 @@ function setBoard() {
   //reset gameboard to blank
   let squares = document.querySelectorAll('.territory')
   for (let square of squares) {
-    console.log(square.textContent = '');
+    square.textContent = '';
   }
   // reset move counter from player obj
   playerO.resetCounter();
