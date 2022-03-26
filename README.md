@@ -6,5 +6,5 @@ This game will be used to flex my understanding of factory functions as I develo
 + [x] object player
 + [x] object active game
 + [x] check if tie and alert if so
-+ [ ] make X or O go first by init coin flip and the following match will have the one that went second to then be first to make a move.
++ [x] player determined to go first will be determined by RNGsus at the beginning of each round
 + [ ] add AI for player to go agaisnt
