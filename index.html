@@ -12,8 +12,15 @@
 <body>
   <section class="heart">
     <h1>Tic Tac Toe</h1>
-    <label for="playerMode">Player Mode</label>
-    <input type="range" name="playMode" id="playerMode" min="0" max="1">
+    <section class="mode">
+      <span>PVP</span>
+      <div>
+        <label for="playerMode">Player Mode</label>
+        <input type="range" name="playMode" id="playerMode" min="0" max="1">
+      </div>
+      <span>PVE</span>
+    </section>
+
     <section class="scoreboard">
       <section>
         <span>X Score: </span>
