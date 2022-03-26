@@ -1,28 +1,30 @@
 // player object
-const player = (faction) => {
+const Player = (faction) => {
   let moveCounter = 0;
   let wins = 0;
+  this.goesFirst = false;
   this.faction = faction;
-  const getCounter = () => moveCounter;
-  const resetCounter = () => moveCounter = 0;
-  const movesDone = () => moveCounter++;
+  const getMoveCounter = () => moveCounter;
+  const resetMoveCounter = () => moveCounter = 0;
+  const addToMoveCounter = () => ++moveCounter;
   const addWin = () => wins++;
   const getWins = () => {
     return wins;
   }
   const resetWins = () => wins = 0;
   return {
+    goesFirst,
     faction,
-    getCounter,
-    resetCounter,
-    movesDone,
+    getMoveCounter,
+    resetMoveCounter,
+    addToMoveCounter,
     addWin,
     getWins,
     resetWins
   };
 }
 
-const gameboard = () => {
+const Gameboard = () => {
   let squaresFilled = 0;
   let squares = [];
   const fillSquares = () => squaresFilled++;
@@ -40,7 +42,7 @@ const gameboard = () => {
 }
 
 // winner of war will be determined by best of three matches
-const bestOf3 = () => {
+const BestOf3 = () => {
   let game = 1;
   const getGameNumber = () => {
     return game;
@@ -97,6 +99,7 @@ function matchWinner(player = 'tie') {
   if (player !== 'tie') {
     player.addWin();
     war.nextGame();
+
     //return `winner is ${player.faction}`;
   } else {
     alert('its a tie within matchWinner');
@@ -105,21 +108,24 @@ function matchWinner(player = 'tie') {
 }
 
 function markSpot(e) {
+  console.log(playerO.getMoveCounter(), playerX.getMoveCounter())
   if (e.target.textContent !== '') {
     console.log('already taken');
   } else {
     // x goes first then o
-    if (playerX.getCounter() == playerO.getCounter()) {
+    if ((playerX.goesFirst == true && board.getFilledSquares() % 2 == 0) ||
+      (playerX.goesFirst == false && board.getFilledSquares() % 2 !== 0)) {
       e.target.textContent = 'X'
       board.squares[e.target.title] = playerX.faction;
       board.fillSquares();
-      playerX.movesDone();
+      playerX.addToMoveCounter();
       checkMatchWinner(playerX);
-    } else if (playerX.getCounter() > playerO.getCounter()) {
+    } else if ((playerO.goesFirst == true && board.getFilledSquares() % 2 == 0) ||
+      (playerO.goesFirst == false && board.getFilledSquares() % 2 !== 0)) {
       e.target.textContent = 'O'
       board.squares[e.target.title] = playerO.faction;
       board.fillSquares();
-      playerO.movesDone();
+      playerO.addToMoveCounter();
       checkMatchWinner(playerO);
     }
   }
@@ -127,17 +133,27 @@ function markSpot(e) {
 
 function setBoard() {
   checkWarWinner();
+  // reset move counter from player obj
+  playerO.resetMoveCounter();
+  playerX.resetMoveCounter();
+  playerO.goesFirst = false;
+  playerX.goesFirst = false;
+  //reset board arr
+  board.resetSquareArr();
+  // rng who starts this round
+  let goesFirst = (Math.random() < .5) ? 'X' : 'O';
+  if (goesFirst == 'X') {
+    playerX.goesFirst = true;
+  } else {
+    playerO.goesFirst = true;
+  }
+  alert(`o ${playerO.goesFirst} x ${playerX.goesFirst}`);
 
   //reset gameboard to blank
   let squares = document.querySelectorAll('.territory')
   for (let square of squares) {
     square.textContent = '';
   }
-  // reset move counter from player obj
-  playerO.resetCounter();
-  playerX.resetCounter();
-  //reset board arr
-  board.resetSquareArr();
 
   // add event listeners to all playable squares
   for (let square of squares) {
@@ -160,7 +176,7 @@ function checkWarWinner() {
     playerX.resetWins();
     war.resetGame();
   } else {
-    alert('Match: ' + war.getGameNumber() + '.\nX goes first.');
+    alert('Match: ' + war.getGameNumber());
   }
 
   oScore.textContent = playerO.getWins();
@@ -177,8 +193,8 @@ function startWar() {
 ////////////////////////////////////////////////////////////////
 
 //create player 1 and 2
-const playerO = player('O');
-const playerX = player('X');
-const board = gameboard();
-const war = bestOf3();
+const playerO = Player('O');
+const playerX = Player('X');
+const board = Gameboard();
+const war = BestOf3();
 document.querySelector('.start-it').addEventListener('click', startWar);
