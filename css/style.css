@@ -88,7 +88,32 @@
   justify-items: center;
   align-items: center;
 }
-/* .mode input {
-  color:blue;
-  background-color: green;
-} */
+
+#playerMode::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: salmon;
+  cursor: pointer;
+}
+
+#playerMode::-moz-range-thumb {
+  appearance: none;
+  width: 25px;
+  height: 25px; 
+  background: salmon; 
+  cursor: pointer; 
+}
+
+#playerMode::-webkit-slider-runnable-track {
+  background: rgba(226, 202, 202, 0.5);
+  border: 3px dotted salmon;
+  height: 100%;
+}
+
+#playerMode::-moz-range-track {
+  background: rgba(226, 202, 202, 0.5);
+  border: 3px dotted salmon;
+  height: 100%;
+}
