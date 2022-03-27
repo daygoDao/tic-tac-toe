@@ -24,20 +24,22 @@ const Player = (faction) => {
   };
 }
 
-const Gameboard = () => {
-  let squaresFilled = 0;
-  let squares = [];
-  const fillSquares = () => squaresFilled++;
-  const getFilledSquares = () => squaresFilled;
-  const resetSquareArr = () => {
-    squaresFilled = 0;
-    squares.length = 0;
+class Gameboard {
+  constructor() {
+    this.squaresFilled = 0;
+    this.squares = ['','','','','','','','',''];
   }
-  return {
-    squares,
-    getFilledSquares,
-    fillSquares,
-    resetSquareArr
+  fillSquares() {
+    this.squaresFilled++;
+}
+  getFilledSquares() {
+    return this.squaresFilled;
+  }
+  resetSquareArr() {
+    this.squaresFilled = 0;
+    for (let i = 0; i < 9; i++) {
+      this.squares[i] = ''
+    }
   }
 }
 
@@ -184,10 +186,27 @@ function checkWarWinner() {
 }
 
 function startWar() {
+  let AI = false;
+  let gameMode = document.getElementById('playerMode');
+  if (gameMode == 1) { //pve
+    let AI = true;
+    //pve function?
+  }  else { //pvp
+
+  }
   playerO.resetWins();
   playerX.resetWins();
   war.resetGame();
   setBoard();
+}
+
+/**
+ * playerO will be the computer and this will return the square to be filled via rng
+ * @param
+ * @returns 
+ */
+function vsComputer() {
+
 }
 
 ////////////////////////////////////////////////////////////////
@@ -195,6 +214,6 @@ function startWar() {
 //create player 1 and 2
 const playerO = Player('O');
 const playerX = Player('X');
-const board = Gameboard();
+const board = new Gameboard();
 const war = BestOf3();
 document.querySelector('.start-it').addEventListener('click', startWar);
