@@ -170,12 +170,10 @@ function setBoard() {
   } else {
     playerO.goesFirst = true;
   }
-  alert(`o ${playerO.goesFirst} x ${playerX.goesFirst}`);
+  alert(`${playerO.goesFirst ? playerO.faction : playerX.faction} will go first this round`);
 
   //does player O go first? if so then make that move!
   if (playerO.goesFirst == true && playerO.isAI == true) {
-    alert('meep meep')
-    console.log('calling from setBoard')
     vsComputer();
   }
 }
@@ -210,7 +208,7 @@ function startWar() {
 
   let gameMode = document.getElementById('playerMode');
   if (gameMode.value == 1) { //pve
-    alert(`gameMode value is ${gameMode.value}`)
+    //alert(`gameMode value is ${gameMode.value}`)
     playerO.isAI = true;
     //pve function?
 
