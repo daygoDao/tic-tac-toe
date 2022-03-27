@@ -8,4 +8,4 @@ This game will be used to flex my understanding of factory functions as I develo
 + [x] check if tie and alert if so
 + [x] player determined to go first will be determined by RNGsus at the beginning of each round
 + [ ] add a play again option at the end of war
-+ [ ] add AI for player to go agaisnt
++ [x] add AI for player to go agaisnt
