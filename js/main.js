@@ -193,7 +193,7 @@ function checkWarWinner() {
     playerX.resetWins();
     war.resetGame();
   } else {
-    alert('Match: ' + war.getGameNumber());
+    alert(`Match: ${war.getGameNumber()} of 3`);
   }
 
   oScore.textContent = playerO.getWins();
