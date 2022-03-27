@@ -2,6 +2,7 @@
 const Player = (faction) => {
   let moveCounter = 0;
   let wins = 0;
+  let isAI = false;
   this.goesFirst = false;
   this.faction = faction;
   const getMoveCounter = () => moveCounter;
@@ -13,6 +14,7 @@ const Player = (faction) => {
   }
   const resetWins = () => wins = 0;
   return {
+    isAI,
     goesFirst,
     faction,
     getMoveCounter,
@@ -27,11 +29,11 @@ const Player = (faction) => {
 class Gameboard {
   constructor() {
     this.squaresFilled = 0;
-    this.squares = ['','','','','','','','',''];
+    this.squares = ['', '', '', '', '', '', '', '', ''];
   }
   fillSquares() {
     this.squaresFilled++;
-}
+  }
   getFilledSquares() {
     return this.squaresFilled;
   }
@@ -110,27 +112,35 @@ function matchWinner(player = 'tie') {
 }
 
 function markSpot(e) {
-  console.log(playerO.getMoveCounter(), playerX.getMoveCounter())
+  //console.log(playerO.getMoveCounter(), playerX.getMoveCounter())
   if (e.target.textContent !== '') {
     console.log('already taken');
   } else {
     // x goes first then o
     if ((playerX.goesFirst == true && board.getFilledSquares() % 2 == 0) ||
       (playerX.goesFirst == false && board.getFilledSquares() % 2 !== 0)) {
-      e.target.textContent = 'X'
-      board.squares[e.target.title] = playerX.faction;
-      board.fillSquares();
-      playerX.addToMoveCounter();
+      helpMarkSpot(e, playerX);
       checkMatchWinner(playerX);
+      //check if O is AI
+      if (playerO.isAI == true) {
+
+      }
     } else if ((playerO.goesFirst == true && board.getFilledSquares() % 2 == 0) ||
       (playerO.goesFirst == false && board.getFilledSquares() % 2 !== 0)) {
-      e.target.textContent = 'O'
-      board.squares[e.target.title] = playerO.faction;
-      board.fillSquares();
-      playerO.addToMoveCounter();
+      helpMarkSpot(e, playerO);
       checkMatchWinner(playerO);
     }
   }
+}
+
+/**
+ * markSpot helper
+ */
+function helpMarkSpot(e, player) {
+  e.target.textContent = player.faction;
+  board.squares[e.target.title] = player.faction;
+  board.fillSquares();
+  player.addToMoveCounter();
 }
 
 function setBoard() {
@@ -191,7 +201,7 @@ function startWar() {
   if (gameMode == 1) { //pve
     let AI = true;
     //pve function?
-  }  else { //pvp
+  } else { //pvp
 
   }
   playerO.resetWins();
@@ -201,12 +211,17 @@ function startWar() {
 }
 
 /**
- * playerO will be the computer and this will return the square to be filled via rng
+ * playerO will be the computer
  * @param
  * @returns 
  */
 function vsComputer() {
-
+  let compChoice = Math.floor(Math.random() * 10);
+  while (board.squares[compChoice] !== '') {
+    compChoice = Math.floor(Math.random() * 10);
+  }
+  console.log(compChoice)
+  return compChoice;
 }
 
 ////////////////////////////////////////////////////////////////
