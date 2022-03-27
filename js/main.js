@@ -120,7 +120,8 @@ function markSpot(e) {
       helpMarkSpot(playerX, e);
       checkMatchWinner(playerX);
       //check if O is AI
-      if (playerO.isAI == true) {
+      if (playerO.isAI == true && playerX.getMoveCounter() > 0) {
+        console.log('calling from markSpot')
         vsComputer();
       }
     } else if ((playerO.goesFirst == true && board.getFilledSquares() % 2 == 0) ||
@@ -151,6 +152,17 @@ function setBoard() {
   //reset board arr
   board.resetSquareArr();
 
+  //reset gameboard to blank
+  let squares = document.querySelectorAll('.territory')
+  for (let square of squares) {
+    square.textContent = '';
+  }
+
+  // add event listeners to all playable squares
+  for (let square of squares) {
+    square.addEventListener('click', markSpot);
+  }
+
   // rng who starts this round
   let goesFirst = (Math.random() < .5) ? 'X' : 'O';
   if (goesFirst == 'X') {
@@ -163,18 +175,8 @@ function setBoard() {
   //does player O go first? if so then make that move!
   if (playerO.goesFirst == true && playerO.isAI == true) {
     alert('meep meep')
+    console.log('calling from setBoard')
     vsComputer();
-  }
-
-  //reset gameboard to blank
-  let squares = document.querySelectorAll('.territory')
-  for (let square of squares) {
-    square.textContent = '';
-  }
-
-  // add event listeners to all playable squares
-  for (let square of squares) {
-    square.addEventListener('click', markSpot);
   }
 }
 
@@ -211,6 +213,7 @@ function startWar() {
     alert(`gameMode value is ${gameMode.value}`)
     playerO.isAI = true;
     //pve function?
+
   }
   setBoard();
 }
@@ -221,7 +224,7 @@ function startWar() {
  * @returns 
  */
 function vsComputer() {
-
+  if(playerO.goesFirst == true && playerO.getMoveCounter() == 0){}
   let compChoice = Math.floor(Math.random() * 10);
   while (board.squares[compChoice] !== '') {
     compChoice = Math.floor(Math.random() * 10);
