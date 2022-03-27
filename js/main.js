@@ -62,7 +62,7 @@ const BestOf3 = () => {
 
 const checkMatchWinner = (player) => {
   // if tie
-  console.log('within checkMatchWinner.', `squaresFilled is ${board.getFilledSquares()}`)
+  //console.log('within checkMatchWinner.', `squaresFilled is ${board.getFilledSquares()}`)
   if (board.getFilledSquares() == 9) {
     alert('tie game')
     matchWinner();
@@ -112,22 +112,20 @@ function matchWinner(player = 'tie') {
 }
 
 function markSpot(e) {
-  //console.log(playerO.getMoveCounter(), playerX.getMoveCounter())
   if (e.target.textContent !== '') {
     console.log('already taken');
   } else {
-    // x goes first then o
     if ((playerX.goesFirst == true && board.getFilledSquares() % 2 == 0) ||
       (playerX.goesFirst == false && board.getFilledSquares() % 2 !== 0)) {
-      helpMarkSpot(e, playerX);
+      helpMarkSpot(playerX, e);
       checkMatchWinner(playerX);
       //check if O is AI
       if (playerO.isAI == true) {
-
+        vsComputer();
       }
     } else if ((playerO.goesFirst == true && board.getFilledSquares() % 2 == 0) ||
       (playerO.goesFirst == false && board.getFilledSquares() % 2 !== 0)) {
-      helpMarkSpot(e, playerO);
+      helpMarkSpot(playerO, e);
       checkMatchWinner(playerO);
     }
   }
@@ -136,7 +134,7 @@ function markSpot(e) {
 /**
  * markSpot helper
  */
-function helpMarkSpot(e, player) {
+function helpMarkSpot(player, e) {
   e.target.textContent = player.faction;
   board.squares[e.target.title] = player.faction;
   board.fillSquares();
@@ -152,6 +150,7 @@ function setBoard() {
   playerX.goesFirst = false;
   //reset board arr
   board.resetSquareArr();
+
   // rng who starts this round
   let goesFirst = (Math.random() < .5) ? 'X' : 'O';
   if (goesFirst == 'X') {
@@ -160,6 +159,12 @@ function setBoard() {
     playerO.goesFirst = true;
   }
   alert(`o ${playerO.goesFirst} x ${playerX.goesFirst}`);
+
+  //does player O go first? if so then make that move!
+  if (playerO.goesFirst == true && playerO.isAI == true) {
+    alert('meep meep')
+    vsComputer();
+  }
 
   //reset gameboard to blank
   let squares = document.querySelectorAll('.territory')
@@ -196,17 +201,17 @@ function checkWarWinner() {
 }
 
 function startWar() {
-  let AI = false;
-  let gameMode = document.getElementById('playerMode');
-  if (gameMode == 1) { //pve
-    let AI = true;
-    //pve function?
-  } else { //pvp
-
-  }
+  // reset scoreboard
   playerO.resetWins();
   playerX.resetWins();
   war.resetGame();
+
+  let gameMode = document.getElementById('playerMode');
+  if (gameMode.value == 1) { //pve
+    alert(`gameMode value is ${gameMode.value}`)
+    playerO.isAI = true;
+    //pve function?
+  }
   setBoard();
 }
 
@@ -216,11 +221,22 @@ function startWar() {
  * @returns 
  */
 function vsComputer() {
+
   let compChoice = Math.floor(Math.random() * 10);
   while (board.squares[compChoice] !== '') {
     compChoice = Math.floor(Math.random() * 10);
   }
-  console.log(compChoice)
+  //console.log(compChoice)
+  //now mark spot on board and on UI
+  let squares = document.querySelector('.gameboard').children;
+  let square = squares.item(compChoice);
+  console.log(square);
+  square.textContent = playerO.faction;
+  board.squares[square.title] = playerO.faction;
+  board.fillSquares();
+  playerO.addToMoveCounter();
+  checkMatchWinner(playerO)
+
   return compChoice;
 }
 
